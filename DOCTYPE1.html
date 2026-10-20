@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJMP Personnel Leave Transaction Log (CY 2027)</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #1e3a8a;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --success-color: #16a34a;
+            --success-hover: #15803d;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 24px 16px;
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-year {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Dashboard Stats */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 18px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 6px 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        /* Leave Allocation Table Panel */
+        .allocation-section {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .allocation-section h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .personnel-tag {
+            font-size: 14px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* Layout Grid */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            height: fit-content;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #fff;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 70px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .days-preview {
+            font-size: 12px;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Buttons */
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .btn-success:hover {
+            background-color: var(--success-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .btn-icon-danger {
+            background-color: #fee2e2;
+            color: var(--danger-color);
+            padding: 5px 8px;
+            font-size: 13px;
+            border-radius: 4px;
+            border: 1px solid #fca5a5;
+        }
+
+        .btn-icon-danger:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .action-btns {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Filter Controls */
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex-grow: 1;
+        }
+
+        .search-filters input, 
+        .search-filters select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            min-width: 140px;
+            outline: none;
+        }
+
+        /* Table Design */
+        .table-responsive {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            padding: 12px 14px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .table-footer-row td {
+            font-weight: bold;
+            background-color: #f8fafc;
+            border-top: 2px solid var(--border-color);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .badge-rank {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-vl {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-sl {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-other {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .badge-so {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px !important;
+            font-style: italic;
+        }
+        
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-overlay">Sinusave sa Google Sheet... Sandali lang...</div>
+
+<div class="container">
+    <header>
+        <h1>BJMP PERSONNEL LEAVE TRANSACTION LOG</h1>
+        <span class="badge-year">CY 2027</span>
+    </header>
+
+    <!-- Dashboard Stats -->
+    <div class="dashboard">
+        <div class="stat-card">
+            <h3>Total Logs</h3>
+            <div class="value" id="stat-total-logs">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Days Taken</h3>
+            <div class="value" id="stat-total-days">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Vacation Leaves</h3>
+            <div class="value" id="stat-vl">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Sick Leaves</h3>
+            <div class="value" id="stat-sl">0</div>
+        </div>
+    </div>
+
+    <!-- Leave Allocation & Usage Summary Table -->
+    <div class="allocation-section" id="allocation-section">
+        <h2>
+            <span>Personnel Leave Balance Summary</span>
+            <span class="personnel-tag" id="selected-personnel-name">-</span>
+        </h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Leave Type</th>
+                        <th>Allocated Days</th>
+                        <th>Used Days</th>
+                        <th>Available Days</th>
+                    </tr>
+                </thead>
+                <tbody id="allocation-table-body">
+                    <!-- Dynamic rendering via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <!-- Form Panel -->
+        <div class="panel">
+            <h2>Add Leave Record</h2>
+            <form id="leave-form">
+                <div class="form-group">
+                    <label for="rank">Rank</label>
+                    <select id="rank" required>
+                        <option value="">-- Select Rank --</option>
+                        <option value="JO1">JO1</option>
+                        <option value="JO2">JO2</option>
+                        <option value="JO3">JO3</option>
+                        <option value="SJO1">SJO1</option>
+                        <option value="SJO2">SJO2</option>
+                        <option value="SJO3">SJO3</option>
+                        <option value="SJO4">SJO4</option>
+                        <option value="JINSP">JINSP</option>
+                        <option value="JSINSP">JSINSP</option>
+                        <option value="JCINSP">JCINSP</option>
+                        <option value="JSUPT">JSUPT</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="badge-no">Badge No.</label>
+                    <input type="text" id="badge-no" placeholder="e.g. 2027-0123" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name-select">Personnel Name</label>
+                    <select id="name-select" required>
+                        <option value="">-- Select Personnel --</option>
+                        <option value="Rogelio D Dela Cruz">Rogelio D Dela Cruz</option>
+                        <option value="Wilna D Torreon">Wilna D Torreon</option>
+                        <option value="Aimee Rose A Mendoza">Aimee Rose A Mendoza</option>
+                        <option value="King Solomon B Rufo">King Solomon B Rufo</option>
+                        <option value="OTHER">Other name...</option>
+                    </select>
+                </div>
+
+                <!-- Hidden Input for Other Name -->
+                <div class="form-group" id="other-name-group" style="display: none;">
+                    <label for="other-name-input">Type Personnel Name</label>
+                    <input type="text" id="other-name-input" placeholder="e.g. Juan Dela Cruz">
+                </div>
+
+                <div class="form-group">
+                    <label for="leave-type">Leave Type</label>
+                    <select id="leave-type" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="Vacation Leave (VL)">Vacation Leave (VL)</option>
+                        <option value="Sick Leave (SL)">Sick Leave (SL)</option>
+                        <option value="Forced Leave (FL)">Forced Leave (FL)</option>
+			<option value="Wellness Leave (SPL)">Wellness Leave (SPL)</option>
+                        <option value="Special Privilege Leave (SPL)">Special Privilege Leave (SPL)</option>
+                        <option value="Maternity Leave">Maternity Leave</option>
+                        <option value="Special Leave Benefits for Women">Special Leave Benefits for Women</option>
+                        <option value="Paternity Leave">Paternity Leave</option>
+                        <option value="Solo Parent Leave">Solo Parent Leave</option>
+                        <option value="VAWC Leave">VAWC Leave</option>
+                        <option value="Study Leave">Study Leave</option>
+                        <option value="Emergency Leave">Emergency Leave</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start-date">Start Date</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">End Date</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                </div>
+                <div id="days-preview" class="days-preview"></div>
+
+                <div class="form-group" style="margin-top: 10px;">
+                    <label for="remarks">Remarks / Reason</label>
+                    <textarea id="remarks" placeholder="e.g. Family Outing / Personal Business"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary">＋ Submit Leave Record</button>
+            </form>
+        </div>
+
+        <!-- Data Table Panel -->
+        <div class="panel" style="overflow: hidden;">
+            <h2>Transaction Log List</h2>
+            
+            <div class="controls-row">
+                <div class="search-filters">
+                    <input type="text" id="search-name" placeholder="🔍 Search name or badge no. to view balance...">
+                    <select id="filter-rank">
+                        <option value="">All Ranks</option>
+                        <option value="JO1">JO1</option>
+                        <option value="JO2">JO2</option>
+                        <option value="JO3">JO3</option>
+                        <option value="SJO1">SJO1</option>
+                        <option value="SJO2">SJO2</option>
+                        <option value="SJO3">SJO3</option>
+                        <option value="SJO4">SJO4</option>
+                        <option value="JINSP">JINSP</option>
+                        <option value="SINSP">SINSP</option>
+                        <option value="JCINSP">JCINSP</option>
+                    </select>
+                    <select id="filter-type">
+                        <option value="">All Types</option>
+                        <option value="Vacation Leave">Vacation Leave</option>
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Forced Leave">Forced Leave</option>
+			<option value="Wellness Leave (SPL)">Wellness Leave (SPL)</option>
+                        <option value="Special Privilege Leave">Special Privilege Leave</option>
+                        <option value="Maternity Leave">Maternity Leave</option>
+                        <option value="Special Leave Benefits for Women">Special Leave Benefits for Women</option>
+                        <option value="Paternity Leave">Paternity Leave</option>
+                        <option value="Solo Parent Leave">Solo Parent Leave</option>
+                        <option value="VAWC Leave">VAWC Leave</option>
+                        <option value="Study Leave">Study Leave</option>
+                    </select>
+                    <button id="reset-filter-btn" class="btn-secondary">Reset</button>
+                </div>
+                <button id="export-btn" class="btn-secondary">📥 Export Filtered CSV</button>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Badge No.</th>
+                            <th>Personnel Name</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Days</th>
+                            <th>Remarks</th>
+                            <th>Date Logged</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-table-body">
+                        <!-- Dynamic rows rendered here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Iyong Google Apps Script Web App URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXG8QZT6CItk8GkMzeG26ujtHzRgTWA4pQCmKx-o1b8OHcMNvGrS9-d5sf4lhRRxEGHQ/exec';
+
+    const leaveAllocationsTemplate = [
+        { type: 'Vacation Leave (VL)', allocated: 15 },
+        { type: 'Sick Leave (SL)', allocated: 15 },
+        { type: 'Forced Leave (FL)', allocated: 5 },
+	{ type: 'Wellness Leave (SPL)', allocated: 5 },
+        { type: 'Special Privilege Leave (SPL)', allocated: 3 },
+        { type: 'Maternity Leave', allocated: 105 },
+        { type: 'Special Leave Benefits for Women', allocated: 60 },
+        { type: 'Paternity Leave', allocated: 7 },
+        { type: 'Solo Parent Leave', allocated: 7 },
+        { type: 'VAWC Leave', allocated: 10 },
+        { type: 'Study Leave', allocated: 60 }
+    ];
+
+    let leaveRecords = [];
+
+    // DOM Elements
+    const form = document.getElementById('leave-form');
+    const tableBody = document.getElementById('log-table-body');
+    const allocationTableBody = document.getElementById('allocation-table-body');
+    const allocationSection = document.getElementById('allocation-section');
+    const selectedPersonnelNameTag = document.getElementById('selected-personnel-name');
+    const searchName = document.getElementById('search-name');
+    const filterRank = document.getElementById('filter-rank');
+    const filterType = document.getElementById('filter-type');
+    const resetFilterBtn = document.getElementById('reset-filter-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    const daysPreview = document.getElementById('days-preview');
+    const nameSelect = document.getElementById('name-select');
+    const otherNameGroup = document.getElementById('other-name-group');
+    const otherNameInput = document.getElementById('other-name-input');
+    const badgeNoInput = document.getElementById('badge-no');
+    const loadingOverlay = document.getElementById('loading-overlay');
+
+    // Fetch data galing sa Google Sheet pag-load ng page
+    async function fetchRecordsFromSheet() {
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.textContent = 'Kinukuha ang data mula sa Google Sheet...';
+        try {
+            const response = await fetch(SCRIPT_URL);
+            const result = await response.json();
+            if (Array.isArray(result)) {
+                leaveRecords = result;
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert('Hindi nakuha ang data mula sa Google Sheet.');
+        } finally {
+            loadingOverlay.style.display = 'none';
+            render();
+        }
+    }
+
+    // Toggle Other Name input field
+    nameSelect.addEventListener('change', function() {
+        if (this.value === 'OTHER') {
+            otherNameGroup.style.display = 'block';
+            otherNameInput.setAttribute('required', 'true');
+        } else {
+            otherNameGroup.style.display = 'none';
+            otherNameInput.removeAttribute('required');
+            otherNameInput.value = '';
+        }
+    });
+
+    // Auto calculate days on date picker change
+    function updateDaysPreview() {
+        const start = new Date(startDateInput.value);
+        const end = new Date(endDateInput.value);
+
+        if (startDateInput.value && endDateInput.value) {
+            if (end >= start) {
+                const diffTime = Math.abs(end - start);
+                const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                daysPreview.textContent = `Calculated duration: ${days} day(s)`;
+            } else {
+                daysPreview.textContent = `⚠️ End date cannot be earlier than start date!`;
+            }
+        } else {
+            daysPreview.textContent = '';
+        }
+    }
+
+    startDateInput.addEventListener('change', updateDaysPreview);
+    endDateInput.addEventListener('change', updateDaysPreview);
+
+    function getPersonnelUsedDays(identifier, leaveTypeStr) {
+        const query = identifier.toLowerCase();
+        return leaveRecords
+            .filter(r => {
+                const matchesNameOrBadge = (r.name && r.name.toLowerCase().includes(query)) || (r.badgeNo && r.badgeNo.toLowerCase().includes(query));
+                const matchesType = r.leaveType && r.leaveType.toLowerCase() === leaveTypeStr.toLowerCase();
+                const isApproved = r.soNumber && r.soNumber.toString().trim() !== "";
+                return matchesNameOrBadge && matchesType && isApproved;
+            })
+            .reduce((acc, curr) => acc + Number(curr.totalDays || 0), 0);
+    }
+
+    // [HAKBANG 3 INTEGRATION] Form Submit Event Listener
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const rankValue = document.getElementById('rank').value;
+        const badgeNoValue = badgeNoInput.value.trim();
+        let nameValue = nameSelect.value;
+        if (nameValue === 'OTHER') {
+            nameValue = otherNameInput.value.trim();
+        }
+
+        const typeValue = document.getElementById('leave-type').value;
+        const startDateValue = startDateInput.value;
+        const endDateValue = endDateInput.value;
+        const remarksValue = document.getElementById('remarks').value.trim() || '-';
+        
+        const start = new Date(startDateValue);
+        const end = new Date(endDateValue);
+        
+        if (end < start) {
+            alert("Error: End date cannot be earlier than start date!");
+            return;
+        }
+
+        const diffTime = Math.abs(end - start);
+        const totalDaysRequested = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        const allocationItem = leaveAllocationsTemplate.find(item => item.type.toLowerCase() === typeValue.toLowerCase());
+        
+        if (allocationItem && allocationItem.allocated > 0) {
+            const currentUsed = getPersonnelUsedDays(nameValue, typeValue);
+            const availableDays = allocationItem.allocated - currentUsed;
+
+            if (totalDaysRequested > availableDays) {
+                alert(`Maximum limit reach!\n\n${nameValue} has requested ${totalDaysRequested} day(s) for ${typeValue}, but only has ${availableDays} available approved day(s) left out of the ${allocationItem.allocated} allocated limit.`);
+                return;
+            }
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+
+        const newRecord = {
+            id: Date.now(),
+            rank: rankValue,
+            badgeNo: badgeNoValue,
+            name: nameValue,
+            leaveType: typeValue,
+            startDate: startDateValue,
+            endDate: endDateValue,
+            totalDays: totalDaysRequested,
+            remarks: remarksValue,
+            dateLogged: today,
+            soNumber: ''
+        };
+
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.textContent = 'Sine-save ang record sa Google Sheet...';
+
+        try {
+            // Pagpapadala ng data online papuntang Google Sheet gamit ang fetch POST request
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'add', data: newRecord })
+            });
+
+            leaveRecords.unshift(newRecord);
+            form.reset();
+            otherNameGroup.style.display = 'none';
+            daysPreview.textContent = '';
+            render();
+            alert('Tagumpay na nai-save ang record sa Google Sheet!');
+        } catch (error) {
+            console.error('Error saving data:', error);
+            alert('Nagka-problema sa pag-save sa Google Sheet.');
+        } finally {
+            loadingOverlay.style.display = 'none';
+        }
+    });
+
+    window.handleAction = async function(id, actionType) {
+        if (actionType === 'approve') {
+            const defaultSoDate = new Date().toISOString().slice(0, 7);
+            const userSoInput = prompt("Please input Special Order Number (format: YYYY-MM-111):", `${defaultSoDate}-001`);
+            
+            if (userSoInput !== null) {
+                const trimmedSo = userSoInput.trim();
+                if (trimmedSo === "") {
+                    alert("Special Order Number is required to approve.");
+                    return;
+                }
+                const record = leaveRecords.find(rec => rec.id == id);
+                if (record) {
+                    record.soNumber = trimmedSo;
+                    await updateRecordInSheet(record, 'update');
+                }
+            }
+        } else if (actionType === 'disapprove') {
+            if (confirm("Leave disapproved. This transaction will be automatically deleted. Proceed?")) {
+                await updateRecordInSheet({ id }, 'delete');
+            }
+        }
+    }
+
+    window.deleteApprovedRecord = async function(id) {
+        const authCode = prompt("Please enter Authorization Code");
+        
+        if (authCode === null) {
+            return;
+        }
+
+        if (authCode.trim() === "240833") {
+            await updateRecordInSheet({ id }, 'delete');
+            alert("The Transaction is successfully deleted");
+        } else {
+            alert("Sorry Wrong Authorization Code");
+        }
+    }
+
+    async function updateRecordInSheet(recordData, actionType) {
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.textContent = 'Ina-update ang Google Sheet...';
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: actionType, data: recordData })
+            });
+
+            await fetchRecordsFromSheet();
+        } catch (error) {
+            console.error('Error updating sheet:', error);
+            alert('Nagka-problema sa pag-update ng Google Sheet.');
+            loadingOverlay.style.display = 'none';
+        }
+    }
+
+    function getLeaveBadge(type) {
+        if (!type) return 'badge-other';
+        if (type.includes('Vacation')) return 'badge-vl';
+        if (type.includes('Sick')) return 'badge-sl';
+        return 'badge-other';
+    }
+
+    function renderAllocationSummary(searchQuery) {
+        if (!searchQuery) {
+            allocationSection.style.display = 'none';
+            return;
+        }
+
+        const matchedRecord = leaveRecords.find(r => (r.name && r.name.toLowerCase().includes(searchQuery)) || (r.badgeNo && r.badgeNo.toLowerCase().includes(searchQuery)));
+        const targetIdentifier = matchedRecord ? matchedRecord.name : searchQuery;
+
+        allocationSection.style.display = 'block';
+        selectedPersonnelNameTag.textContent = matchedRecord ? `${matchedRecord.name} (${matchedRecord.badgeNo || 'No Badge'})` : searchQuery;
+        allocationTableBody.innerHTML = '';
+
+        let totalAllocated = 0;
+        let totalUsed = 0;
+        let totalAvailable = 0;
+
+        leaveAllocationsTemplate.forEach(item => {
+            const used = getPersonnelUsedDays(targetIdentifier, item.type);
+            const available = item.allocated > 0 ? (item.allocated - used) : '-';
+
+            totalAllocated += item.allocated;
+            totalUsed += used;
+            if (item.allocated > 0) {
+                totalAvailable += (item.allocated - used);
+            }
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${item.type}</strong></td>
+                <td>${item.allocated > 0 ? item.allocated : '-'}</td>
+                <td><span style="color: ${used > 0 ? '#b45309' : 'inherit'}; font-weight: ${used > 0 ? '600' : 'normal'}">${used}</span></td>
+                <td>${available}</td>
+            `;
+            allocationTableBody.appendChild(row);
+        });
+
+        const footerRow = document.createElement('tr');
+        footerRow.className = 'table-footer-row';
+        footerRow.innerHTML = `
+            <td>GRAND TOTAL</td>
+            <td>${totalAllocated}</td>
+            <td>${totalUsed}</td>
+            <td>${totalAvailable}</td>
+        `;
+        allocationTableBody.appendChild(footerRow);
+    }
+
+    function getFilteredRecords() {
+        const searchTerm = searchName.value.toLowerCase().trim();
+        const selectedRank = filterRank.value;
+        const selectedType = filterType.value;
+
+        return leaveRecords.filter(rec => {
+            const matchesName = (rec.name && rec.name.toLowerCase().includes(searchTerm)) || (rec.badgeNo && rec.badgeNo.toLowerCase().includes(searchTerm));
+            const matchesRank = selectedRank === "" || rec.rank === selectedRank;
+            const matchesType = selectedType === "" || (rec.leaveType && rec.leaveType.toLowerCase().includes(selectedType.toLowerCase()));
+            return matchesName && matchesRank && matchesType;
+        });
+    }
+
+    function render() {
+        const filtered = getFilteredRecords();
+
+        tableBody.innerHTML = '';
+        if (filtered.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="10" class="empty-row">No personnel leave records found.</td></tr>`;
+        } else {
+            filtered.forEach(rec => {
+                const isApproved = rec.soNumber && rec.soNumber.toString().trim() !== "";
+                const actionContent = isApproved 
+                    ? `<div class="action-btns">
+                         <span class="badge-so">S.O. No: ${rec.soNumber}</span>
+                         <button class="btn-icon-danger" title="Delete Approved Transaction" onclick="deleteApprovedRecord('${rec.id}')">🗑️</button>
+                       </div>`
+                    : `<div class="action-btns">
+                         <button class="btn-success" onclick="handleAction('${rec.id}', 'approve')">Approve</button>
+                         <button class="btn-danger" onclick="handleAction('${rec.id}', 'disapprove')">Disapprove</button>
+                       </div>`;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><span class="badge badge-rank">${rec.rank || ''}</span></td>
+                    <td><strong>${rec.badgeNo || '-'}</strong></td>
+                    <td><strong>${rec.name || ''}</strong></td>
+                    <td><span class="badge ${getLeaveBadge(rec.leaveType)}">${rec.leaveType || ''}</span></td>
+                    <td>${rec.startDate || ''}</td>
+                    <td>${rec.endDate || ''}</td>
+                    <td><strong>${rec.totalDays || 0}</strong></td>
+                    <td>${rec.remarks || ''}</td>
+                    <td>${rec.dateLogged || ''}</td>
+                    <td>${actionContent}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        document.getElementById('stat-total-logs').textContent = leaveRecords.length;
+        document.getElementById('stat-total-days').textContent = leaveRecords.reduce((acc, curr) => acc + Number(curr.totalDays || 0), 0);
+        document.getElementById('stat-vl').textContent = leaveRecords.filter(r => r.leaveType && r.leaveType.toLowerCase().includes('vacation')).length;
+        document.getElementById('stat-sl').textContent = leaveRecords.filter(r => r.leaveType && r.leaveType.toLowerCase().includes('sick')).length;
+
+        renderAllocationSummary(searchName.value.toLowerCase().trim());
+    }
+
+    exportBtn.addEventListener('click', function() {
+        const filtered = getFilteredRecords();
+        if (filtered.length === 0) {
+            alert("No filtered records available to export.");
+            return;
+        }
+
+        let csv = "Rank,Badge No.,Personnel Name,Leave Type,Start Date,End Date,Total Days,Remarks / Reason,Date Logged,Special Order No.\n";
+        filtered.forEach(rec => {
+            const cleanName = `"${(rec.name || '').replace(/"/g, '""')}"`;
+            const cleanRemarks = `"${(rec.remarks || '').replace(/"/g, '""')}"`;
+            csv += `${rec.rank || ''},"${rec.badgeNo || ''}",${cleanName},"${rec.leaveType || ''}",${rec.startDate || ''},${rec.endDate || ''},${rec.totalDays || 0},${cleanRemarks},${rec.dateLogged || ''},"${rec.soNumber || 'Pending'}"\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "BJMP_Filtered_Leave_Log_CY2027.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    searchName.addEventListener('input', render);
+    filterRank.addEventListener('change', render);
+    filterType.addEventListener('change', render);
+
+    resetFilterBtn.addEventListener('click', function() {
+        searchName.value = '';
+        filterRank.value = '';
+        filterType.value = '';
+        render();
+    });
+
+    // Auto-load data pagbukas ng page
+    fetchRecordsFromSheet();
+</script>
+
+</body>
+</html>
